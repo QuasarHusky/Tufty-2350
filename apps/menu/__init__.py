@@ -18,13 +18,10 @@ apps = Apps("/system/apps")
 
 active = 0
 
-MAX_ALPHA = 255
-alpha = 30
-
 io.poll()
 
 def update():
-    global active, apps, alpha
+    global active, apps
 
     # process button inputs to switch between apps
     if io.BUTTON_C in io.pressed:
@@ -56,11 +53,6 @@ def update():
 
     # draw hints for the active page
     apps.draw_pagination()
-
-    if alpha <= MAX_ALPHA:
-        screen.pen = color.rgb(0, 0, 0, 255 - alpha)
-        screen.clear()
-        alpha += 30
 
     return None
 
