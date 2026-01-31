@@ -82,10 +82,7 @@ def render():
     
     current_scene.render_overlay()
 
-    if message_timer > 0:
-        message_timer -= io.ticks_delta
-        render_message()
-
+    render_message()
 
 def on_exit():
     pass
@@ -128,6 +125,13 @@ def show_message(text):
     message_text = text 
 
 def render_message():
+    global message_timer
+    
+    if message_timer <= 0:
+        return
+    
+    message_timer -= io.ticks_delta
+    
     width, height = screen.measure_text(message_text)
     x = (screen.width - width) / 2
     y = 5
