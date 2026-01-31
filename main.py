@@ -1,8 +1,10 @@
 import sys
 import os
-from badgeware import run, fatal_error
+from badgeware import run, fatal_error, display
 import machine
 import gc
+
+display.backlight(0.5)
 
 running_app = None
 
