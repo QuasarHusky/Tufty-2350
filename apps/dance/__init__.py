@@ -3,49 +3,20 @@ import sys
 import math
 from badgeware import SpriteSheet
 
-import scenes.void as scene_void
-import scenes.visualiser as scene_visualiser
+from scenes import scenes
+from characters import characters
 
 sys.path.insert(0, "/system/apps/dance")
 os.chdir("/system/apps/dance")
-
-scenes = [
-    scene_void,
-    scene_visualiser,
-]
-
-animations = [
-    {
-        "path": "assets/paperbark/dance_5.png",
-        "frames": 28,
-    },
-    {
-        "path": "assets/paperbark/dance_8.png",
-        "frames": 31,
-    },
-    {
-        "path": "assets/paperbark/dance_7.png",
-        "frames": 28,
-    },
-    {
-        "path": "assets/paperbark/dance_2.png",
-        "frames": 28,
-    },
-    {
-        "path": "assets/paperbark/jump.png",
-        "frames": 28,
-    },
-    {
-        "path": "assets/paperbark/applaud.png",
-        "frames": 17,
-    },
-]
 
 message_timer = 0
 message_text = ""
 
 current_scene_index = 0
 current_scene = None
+
+current_character_index = 0
+current_character = None
 
 current_animation_index = 0
 current_animation_sprites = None
@@ -57,13 +28,17 @@ screen.antialias = image.X2
 
 def init():
     load_scene(scenes[current_scene_index])
-    load_animation(animations[current_animation_index])
+    load_character(characters[current_character_index])
+    load_animation(current_character.animations[current_animation_index])
 
 def update():
     global current_animation_index, current_animation_sprites, animation_start_time
 
     render()
 
+    if io.BUTTON_A in io.pressed:
+        cycle_character()
+    
     if io.BUTTON_B in io.pressed:
         cycle_animation()
 
@@ -99,20 +74,40 @@ def cycle_scene():
 
     show_message(current_scene.name)
 
+def cycle_character():
+    global current_character_index
+
+    current_character_index += 1
+
+    if current_character_index >= len(characters):
+        current_character_index = 0
+
+    load_character(characters[current_character_index])
+
+    show_message(current_character.name)
+
 def cycle_animation():
     global current_animation_index, animation_start_time
     
     current_animation_index += 1
     animation_start_time = io.ticks
 
-    if current_animation_index >= len(animations):
+    if current_animation_index >= len(current_character.animations):
         current_animation_index = 0
 
-    load_animation(animations[current_animation_index])
+    load_animation(current_character.animations[current_animation_index])
 
 def load_scene(scene):
     global current_scene
     current_scene = scene
+
+def load_character(character):
+    global current_character, current_animation_index
+    
+    current_character = character
+
+    current_animation_index = 0
+    load_animation(current_character.animations[current_animation_index])
 
 def load_animation(animation):
     global current_animation_sprites
