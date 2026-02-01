@@ -114,7 +114,7 @@ def next_animation():
     global current_animation_index, animation_start_time
 
     if auto_cycle:
-        toast.show("Auto Cycle: OFF", duration=toast.SHORT, position=toast.TOP)
+        toast.show("Auto cycle disabled", duration=toast.SHORT, position=toast.TOP)
         set_auto_cycle(False)
     
     current_animation_index += 1
@@ -128,7 +128,7 @@ def prev_animation():
     global current_animation_index, animation_start_time
     
     if auto_cycle:
-        toast.show("Auto Cycle: OFF", duration=toast.SHORT, position=toast.TOP)
+        toast.show("Auto cycle disabled", duration=toast.SHORT, position=toast.TOP)
         set_auto_cycle(False)
 
     current_animation_index -= 1
