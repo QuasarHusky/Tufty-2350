@@ -162,7 +162,11 @@ def update_auto_cycle():
         ))
         
         if len(candidate_animations) > 1:
-            load_animation(random.choice(candidate_animations))
+            animation = random.choice(candidate_animations)
+            load_animation(animation)
+
+            time_per_loop = ms_per_frame * animation["frames"]
+            auto_cycle_timer = math.ceil(auto_cycle_timer / time_per_loop) * time_per_loop
 
 def load_scene(scene):
     global current_scene
