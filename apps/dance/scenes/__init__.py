@@ -1,7 +1,7 @@
-import scenes.void as void
 import scenes.visualiser as visualiser
+import scenes.void as void
 
 scenes = [
-    void,
     visualiser,
+    void,
 ]
