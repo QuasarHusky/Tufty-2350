@@ -101,6 +101,9 @@ def cycle_scene():
 def cycle_character():
     global current_character_index
 
+    if auto_cycle:
+        set_auto_cycle(False)
+
     current_character_index += 1
 
     if current_character_index >= len(characters):
