@@ -1,5 +1,6 @@
 import os
 import sys
+import math
 
 import toast
 
@@ -37,15 +38,18 @@ def update():
 
         return
     
-    screen.blit(current_image, vec2(0, 0))
+    x = math.floor((screen.width - current_image.width) / 2)
+    y = math.floor((screen.height - current_image.height) / 2)
 
+    screen.blit(current_image, vec2(x, y))
+
+    toast.update()
+    
     if io.BUTTON_A in io.pressed or io.BUTTON_UP in io.pressed:
         prev_image()
 
     if io.BUTTON_C in io.pressed or io.BUTTON_DOWN in io.pressed:
         next_image()
-
-    toast.update()
 
 def on_exit():
     pass
