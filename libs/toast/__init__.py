@@ -3,7 +3,7 @@ import math
 TOP = 1
 BOTTOM = 2
 
-SHORT = 1000
+SHORT = 1250
 LONG = 4000
 
 toast_text = ""
@@ -36,8 +36,10 @@ def render():
     elif toast_position == BOTTOM:
         y = screen.height - height - 5
 
-    screen.pen = color.rgb(0, 0, 0, 192)
+    alpha = max(0, min(1, toast_lifetime / 333))
+
+    screen.pen = color.rgb(0, 0, 0, math.floor(alpha * 192))
     screen.rectangle(x - 4, y - 2, width + 8, height + 4)
 
-    screen.pen = color.rgb(255, 255, 255)
+    screen.pen = color.rgb(255, 255, 255, math.floor(alpha * 255))
     screen.text(toast_text, x, y)
