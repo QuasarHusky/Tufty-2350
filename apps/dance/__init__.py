@@ -3,14 +3,13 @@ import sys
 import math
 from badgeware import SpriteSheet
 
+import toast
+
 from scenes import scenes
 from characters import characters
 
 sys.path.insert(0, "/system/apps/dance")
 os.chdir("/system/apps/dance")
-
-message_timer = 0
-message_text = ""
 
 current_scene_index = 0
 current_scene = None
@@ -45,6 +44,8 @@ def update():
     if io.BUTTON_C in io.pressed:
         cycle_scene()
 
+    toast.update()
+
 def render():
     global message_timer
     
@@ -56,8 +57,6 @@ def render():
     screen.blit(image, rect((screen.width - (image.width * 2)) / 2 - 8, screen.height - (image.height * 2) + 4, image.width * 2, image.height * 2))
     
     current_scene.render_overlay()
-
-    render_message()
 
 def on_exit():
     pass
@@ -72,7 +71,7 @@ def cycle_scene():
 
     load_scene(scenes[current_scene_index])
 
-    show_message(current_scene.name)
+    toast.show(current_scene.name, duration=toast.SHORT, position=toast.TOP)
 
 def cycle_character():
     global current_character_index
@@ -84,7 +83,7 @@ def cycle_character():
 
     load_character(characters[current_character_index])
 
-    show_message(current_character.name)
+    toast.show(current_character.name, duration=toast.SHORT, position=toast.TOP)
 
 def cycle_animation():
     global current_animation_index, animation_start_time
@@ -112,27 +111,3 @@ def load_character(character):
 def load_animation(animation):
     global current_animation_sprites
     current_animation_sprites = SpriteSheet(animation["path"], animation["frames"], 1).animation()
-
-def show_message(text):
-    global message_timer, message_text
-
-    message_timer = 1000
-    message_text = text 
-
-def render_message():
-    global message_timer
-    
-    if message_timer <= 0:
-        return
-    
-    message_timer -= io.ticks_delta
-    
-    width, height = screen.measure_text(message_text)
-    x = (screen.width - width) / 2
-    y = 5
-
-    screen.pen = color.rgb(0, 0, 0)
-    screen.rectangle(x - 2, y - 2, width + 4, height + 4)
-
-    screen.pen = color.rgb(255, 255, 255)
-    screen.text(message_text, x, y)

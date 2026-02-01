@@ -20,6 +20,8 @@ def quit_to_launcher(pin):
 
 standard_modules = list(sys.modules.keys())
 
+sys.path.append("/system/libs")
+
 try:
     menu = __import__("/system/apps/menu")
 except Exception as e:  # noqa: BLE001
@@ -45,9 +47,9 @@ if app is not None:
     while io.held:
         io.poll()
 
-    machine.Pin.board.BUTTON_HOME.irq(
-        trigger=machine.Pin.IRQ_FALLING, handler=quit_to_launcher
-    )
+    # machine.Pin.board.BUTTON_HOME.irq(
+    #     trigger=machine.Pin.IRQ_FALLING, handler=quit_to_launcher
+    # )
 
     sys.path.insert(0, app)
     try:
