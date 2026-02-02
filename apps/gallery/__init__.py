@@ -3,6 +3,7 @@ import sys
 import math
 
 import toast
+import system_ui
 
 sys.path.insert(0, "/system/apps/gallery")
 os.chdir("/system/apps/gallery")
@@ -44,6 +45,7 @@ def update():
     screen.blit(current_image, vec2(x, y))
 
     toast.update()
+    system_ui.update()
     
     if io.BUTTON_A in io.pressed or io.BUTTON_UP in io.pressed:
         prev_image()

@@ -5,6 +5,7 @@ import random
 from badgeware import SpriteSheet
 
 import toast
+import system_ui
 
 from scenes import scenes
 from characters import characters
@@ -40,7 +41,9 @@ def update():
 
     update_auto_cycle()
     render()
+
     toast.update()
+    system_ui.update()
 
     if io.BUTTON_A in io.pressed:
         set_auto_cycle(not auto_cycle)

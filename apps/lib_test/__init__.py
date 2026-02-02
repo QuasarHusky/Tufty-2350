@@ -1,4 +1,5 @@
 import toast
+import system_ui
 
 count = 0
 
@@ -20,6 +21,7 @@ def update():
         toast.show(f"Count: {count}", duration=toast.SHORT, position=toast.BOTTOM)
 
     toast.update()
+    system_ui.update()
 
 def on_exit():
     pass
