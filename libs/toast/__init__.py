@@ -29,6 +29,7 @@ def update():
 
 def render():
     width, height = screen.measure_text(toast_text)
+    height += 1
     x = math.floor((screen.width - width) / 2)
 
     if toast_position == TOP:
@@ -39,7 +40,10 @@ def render():
     alpha = max(0, min(1, toast_lifetime / 333))
 
     screen.pen = color.rgb(0, 0, 0, math.floor(alpha * 192))
+
+    screen.rectangle(x - 5, y - 1, 1, height + 2)
     screen.rectangle(x - 4, y - 2, width + 8, height + 4)
+    screen.rectangle(x + width + 4, y - 1, 1, height + 2)
 
     screen.pen = color.rgb(255, 255, 255, math.floor(alpha * 255))
     screen.text(toast_text, x, y)
