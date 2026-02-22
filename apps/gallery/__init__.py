@@ -15,6 +15,8 @@ image_paths = []
 current_index = 0
 current_image = None
 
+locked = False
+
 def init():
     global image_paths
 
@@ -25,7 +27,9 @@ def init():
         change_image(image_paths[0])
 
 def update():
-    global image_paths, current_image
+    global image_paths, current_image, locked
+
+    screen.font = rom_font.ignore
 
     screen.pen = color.rgb(0, 0, 0)
     screen.clear()
@@ -47,11 +51,25 @@ def update():
     toast.update()
     system_ui.update()
     
+    if io.BUTTON_HOME in io.pressed:
+        locked = not locked
+        if locked:
+            toast.show("Locked", duration=toast.SHORT, position=toast.BOTTOM)
+        else:
+            toast.show("Unlocked", duration=toast.SHORT, position=toast.BOTTOM)
+
+
     if io.BUTTON_A in io.pressed or io.BUTTON_UP in io.pressed:
-        prev_image()
+        if not locked:
+            prev_image()
+        else:
+            toast.show("Press HOME to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
     if io.BUTTON_C in io.pressed or io.BUTTON_DOWN in io.pressed:
-        next_image()
+        if not locked:
+            next_image()
+        else:
+            toast.show("Press HOME to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
 def on_exit():
     pass
@@ -91,7 +109,7 @@ def prev_image():
 
 def toast_current_image():
     toast.show(
-        f"({current_index + 1}/{len(image_paths)}) {image_paths[current_index][:-4]}",
+        f"{image_paths[current_index][:-4]}",
         duration=toast.SHORT,
         position=toast.BOTTOM
     )
