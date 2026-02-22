@@ -8,18 +8,16 @@ class AppMenu:
         self.open_menu = None
 
     def update(self):
-        menu_open = self.open_menu != None
-
         if io.BUTTON_HOME in io.pressed:
-            if menu_open:
+            if self.open_menu != None:
                 self.open_menu = None
             else:
                 self.open_menu = self.menu
 
-        if menu_open:
-            self.open_menu.render()
+        if self.open_menu != None:
+            self.open_menu.update()
 
-        return menu_open
+        return self.open_menu != None
 
 class Menu:
 
@@ -28,22 +26,40 @@ class Menu:
         self.parent = parent
         self.label = label
         self.items = []
+        self.targeted_index = 0
 
-    def render(self):
+    def update(self):
         screen.pen = color.rgb(0, 0, 0, 172)
         screen.rectangle(0, 0, screen.width, screen.height)
 
         screen.pen = color.rgb(255, 255, 255)
-        screen.text(self.label, 10, 10)
+        screen.text(self.label, 4, 4)
 
-        self.render_items()
+        self.update_items()
 
-    def render_items(self):
+        if io.BUTTON_UP in io.pressed:
+            self.targeted_index -= 1
+
+            if self.targeted_index < 0:
+                self.targeted_index = len(self.items) - 1
+
+        if io.BUTTON_DOWN in io.pressed:
+            self.targeted_index += 1
+
+            if self.targeted_index >= len(self.items):
+                self.targeted_index = 0
+
+    def update_items(self):
         y = 20
 
         for index, item in enumerate(self.items):
+            targeted = self.targeted_index == index
+
+            if targeted:
+                item.update()
+
             item_height = item.get_height()
-            item.render(4, y, screen.width - 8, item_height, index == 0)
+            item.render(4, y, screen.width - 8, item_height, targeted)
             y += item_height + 2
 
     def add(self, item):
@@ -84,9 +100,9 @@ class MenuButton:
 
     def render(self, x, y, width, height, targeted):
         if targeted:
-            screen.pen = color.rgb(10, 10, 10)
-        else:
             screen.pen = color.rgb(30, 30, 30)
+        else:
+            screen.pen = color.rgb(10, 10, 10)
 
         screen.rectangle(x, y, width, height)
 
