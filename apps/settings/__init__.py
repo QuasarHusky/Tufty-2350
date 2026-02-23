@@ -32,7 +32,7 @@ def update():
         State.save("quasar.system", system_state)
 
 def percent_to_backlight(percent):
-    return (percent * (1 - 0.43)) + 0.43
+    return (percent * (1 - 0.45)) + 0.45
 
 def backlight_to_percent(backlight):
-    return (backlight - 0.43) / (1 - 0.43)
+    return (backlight - 0.45) / (1 - 0.45)
