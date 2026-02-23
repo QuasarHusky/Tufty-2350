@@ -63,6 +63,7 @@ def run(app):
         fatal_error("App Error", e)
 
 def quit_to_launcher(pin):
+    State.load("quasar.system", system_state)
     system_state["launch_app"] = None
     State.save("quasar.system", system_state)
     
@@ -99,6 +100,7 @@ gc.collect()
 if app is None:
     fatal_error("System Error", "Launcher did not provide an app to run")
 
+State.load("quasar.system", system_state)
 system_state["launch_app"] = app
 State.save("quasar.system", system_state)
 
@@ -117,8 +119,10 @@ try:
     os.chdir(app)
     running_app = __import__(app)
 except Exception as e:
+    State.load("quasar.system", system_state)
     system_state["launch_app"] = None
     State.save("quasar.system", system_state)
+    
     fatal_error("System Error", e)
 
 run(running_app)
