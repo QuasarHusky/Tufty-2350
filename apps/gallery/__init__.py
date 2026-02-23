@@ -1,6 +1,7 @@
 import os
 import sys
 import math
+from badgeware import State
 
 import toast
 import system_ui
@@ -8,7 +9,13 @@ import system_ui
 sys.path.insert(0, "/system/apps/gallery")
 os.chdir("/system/apps/gallery")
 
+APP_ID = "quasar.gallery"
+
 mode(HIRES)
+
+state = {
+    "recent_image_path": None,
+}
 
 image_paths = []
 
@@ -18,13 +25,20 @@ current_image = None
 locked = False
 
 def init():
-    global image_paths
+    global image_paths, state, current_index
+
+    State.load(APP_ID, state)
 
     image_paths = list(filter(lambda path: path.lower().endswith(".png"), os.listdir("images")))
     image_paths.sort()
 
     if len(image_paths) > 0:
-        change_image(image_paths[0])
+        try:
+            index = image_paths.index(state["recent_image_path"])
+            current_index = index
+            change_image(image_paths[index])
+        except ValueError:
+            change_image(image_paths[0])
 
 def update():
     global image_paths, current_image, locked
@@ -75,8 +89,11 @@ def on_exit():
     pass
 
 def change_image(image_path):
-    global current_image
+    global current_image, state
     current_image = image.load(f"images/{image_path}")
+
+    state["recent_image_path"] = image_path
+    State.save(APP_ID, state)
 
 def next_image():
     global current_index, image_paths
