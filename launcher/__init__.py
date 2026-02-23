@@ -1,16 +1,12 @@
 import os
 import sys
 
-sys.path.insert(0, "/system/apps/menu")
-sys.path.insert(0, "/")
-os.chdir("/system/apps/menu")
-
 import ui
 from badgeware import run
 
 from app import Apps
 
-screen.font = pixel_font.load("/system/assets/fonts/ark.ppf")
+screen.font = rom_font.ark
 
 
 # find installed apps and create apps

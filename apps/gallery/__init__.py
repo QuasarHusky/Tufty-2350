@@ -24,6 +24,8 @@ current_image = None
 
 locked = False
 
+should_render = True
+
 def init():
     global image_paths, state, current_index
 
@@ -41,29 +43,17 @@ def init():
             change_image(image_paths[0])
 
 def update():
-    global image_paths, current_image, locked
+    global image_paths, current_image, locked, should_render
 
-    screen.font = rom_font.ignore
+    if should_render:
+        render()
+        should_render = False
 
-    screen.pen = color.rgb(0, 0, 0)
-    screen.clear()
-
-    if current_image == None:
-        screen.pen = color.rgb(0, 0, 0)
-        screen.clear()
-
-        screen.pen = color.rgb(255, 255, 255)
-        screen.text("No images available", 10, 10)
-
-        return
+    if toast.toast_lifetime > 0:
+        should_render = True
     
-    x = math.floor((screen.width - current_image.width) / 2)
-    y = math.floor((screen.height - current_image.height) / 2)
-
-    screen.blit(current_image, vec2(x, y))
-
+    screen.font = rom_font.ignore
     toast.update()
-    system_ui.update()
     
     if io.BUTTON_HOME in io.pressed:
         locked = not locked
@@ -85,15 +75,37 @@ def update():
         else:
             toast.show("Press HOME to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
+def render():
+    screen.font = rom_font.ignore
+
+    screen.pen = color.rgb(0, 0, 0)
+    screen.clear()
+
+    if current_image == None:
+        screen.pen = color.rgb(0, 0, 0)
+        screen.clear()
+
+        screen.pen = color.rgb(255, 255, 255)
+        screen.text("No images available", 10, 10)
+
+        return
+    
+    x = math.floor((screen.width - current_image.width) / 2)
+    y = math.floor((screen.height - current_image.height) / 2)
+
+    screen.blit(current_image, vec2(x, y))
+
 def on_exit():
     pass
 
 def change_image(image_path):
-    global current_image, state
+    global current_image, state, should_render
     current_image = image.load(f"images/{image_path}")
 
     state["recent_image_path"] = image_path
     State.save(APP_ID, state)
+
+    should_render = True
 
 def next_image():
     global current_index, image_paths
