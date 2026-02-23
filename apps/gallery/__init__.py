@@ -55,7 +55,7 @@ def update():
     screen.font = rom_font.ignore
     toast.update()
     
-    if io.BUTTON_HOME in io.pressed:
+    if io.BUTTON_B in io.pressed:
         locked = not locked
         if locked:
             toast.show("Locked", duration=toast.SHORT, position=toast.BOTTOM)
@@ -67,13 +67,13 @@ def update():
         if not locked:
             prev_image()
         else:
-            toast.show("Press HOME to unlock", duration=toast.SHORT, position=toast.BOTTOM)
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
     if io.BUTTON_C in io.pressed or io.BUTTON_DOWN in io.pressed:
         if not locked:
             next_image()
         else:
-            toast.show("Press HOME to unlock", duration=toast.SHORT, position=toast.BOTTOM)
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
 def render():
     screen.font = rom_font.ignore
