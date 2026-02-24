@@ -36,7 +36,6 @@ try:
 
             if init:
                 init()
-                gc.collect()
             
             result = None
 
@@ -51,12 +50,9 @@ try:
                 # screen.text(f"{1000 / io.ticks_delta:.1f}", 2, 0)
 
                 display.update(screen.width == 320)
-            
-            gc.collect()
 
             if on_exit:
                 on_exit()
-                gc.collect()
 
             return result
 
