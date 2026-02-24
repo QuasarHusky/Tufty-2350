@@ -1,0 +1,85 @@
+import random
+from goal.goal import Goal
+from utils import LEFT, RIGHT
+import utils
+
+class FollowPonyGoal(Goal):
+
+    def __init__(self, pony, target_pony, duration=10000, speed=50):
+        super().__init__(pony)
+
+        self.target_pony = target_pony
+        self.speed = speed
+        self.timer = duration
+        self.moving = False
+
+        self.blink_timer = random.randint(0, 4000)
+        self.blinking = False
+
+    def start(self):
+        pass
+
+    def update(self):
+        self.timer -= io.ticks_delta
+
+        if self.timer <= 0:
+            return True
+
+        delta = io.ticks_delta / 1000
+
+        offset_x = 0
+        offset_y = 5
+
+        if self.target_pony.facing == LEFT:
+            offset_x += 20
+        else:
+            offset_x -= 20
+
+        target_x = self.target_pony.x + offset_x
+        target_y = self.target_pony.y + offset_y
+
+        distance_to_target = utils.distance(self.pony.x, self.pony.y, target_x, target_y)
+
+        if distance_to_target > 2:
+            vx = ((target_x - self.pony.x) / distance_to_target) * self.speed * delta
+            vy = ((target_y - self.pony.y) / distance_to_target) * self.speed * delta
+
+            self.pony.x += vx
+            self.pony.y += vy
+
+            if vx > 0:
+                self.pony.set_facing(RIGHT)
+            else:
+                self.pony.set_facing(LEFT)
+
+            if not self.moving:
+                self.moving = True
+                self.pony.animate_looping("walk")
+                self.blinking = False
+        else:
+            if self.moving:
+                self.moving = False
+                self.pony.animate_looping("idle")
+
+            self.blink_timer -= io.ticks_delta
+
+            if self.blink_timer <= 0:
+                if self.blinking == False:
+                    self.blinking = True
+                    self.pony.animate_oneshot("blink")
+                
+                if self.pony.is_animation_finished():
+                    self.blinking = False
+                    self.pony.animate_looping("idle")
+                    self.blink_timer = random.randint(1500, 4000)
+
+        return False
+
+    def finish(self, interrupt):
+        self.pony.animate_looping("idle")
+
+    def debug(self):
+        return [
+            "follow_pony",
+            f"-> {self.target_pony.data.name}",
+        ]
