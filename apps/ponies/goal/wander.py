@@ -15,7 +15,11 @@ class WanderGoal(Goal):
 
         self.speed = speed
 
-        direction = random.random() * math.pi * 2
+        direction = (random.random() * (math.pi / 2)) - (math.pi / 4)
+
+        if random.random() > 0.5:
+            direction += math.pi
+
         self.vx = math.cos(direction) * speed
         self.vy = math.sin(direction) * speed
 
