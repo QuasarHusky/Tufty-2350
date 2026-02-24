@@ -1,4 +1,5 @@
 from badgeware import SpriteSheet
+import random
 import goal
 from utils import LEFT, RIGHT
 
@@ -30,13 +31,33 @@ def animations():
 def available_goals(pony):
     goals = {
         "idle": {
-            "weight": 10,
+            "weight": 50,
             "build": lambda pony: [goal.IdleGoal(pony)],
         },
         "wander": {
             "weight": 10,
             "build": lambda pony: [goal.WanderGoal(pony)],
+        },
+        "portal": {
+            "weight": 1,
+            "build": build_portal_goal,
         }
     }
 
     return goals
+
+def build_portal_goal(pony):
+    if random.random() > 0.5:
+        # Right portal
+        return [
+            goal.WalkToPointGoal(pony, screen.width + 20, pony.y),
+            goal.TeleportGoal(pony, -20 - pony.width, pony.y),
+            goal.WalkToPointGoal(pony, 10, pony.y),
+        ]
+    else:
+        # Left portal
+        return [
+            goal.WalkToPointGoal(pony, -20 - pony.width, pony.y),
+            goal.TeleportGoal(pony, screen.width + 20, pony.y),
+            goal.WalkToPointGoal(pony, screen.width - pony.width - 10, pony.y),
+        ]
