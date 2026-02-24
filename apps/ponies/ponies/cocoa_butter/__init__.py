@@ -16,7 +16,7 @@ sprite_bounds = {
 def animations():
     return {
         "idle": {
-            "framerate": 24,
+            "framerate": 1,
             LEFT: SpriteSheet("ponies/cocoa_butter/idle_left.png", 1, 1).animation(),
             RIGHT: SpriteSheet("ponies/cocoa_butter/idle_right.png", 1, 1).animation(),
         },
@@ -25,6 +25,16 @@ def animations():
             "framerate": 24,
             LEFT: SpriteSheet("ponies/cocoa_butter/walk_left.png", 16, 1).animation(),
             RIGHT: SpriteSheet("ponies/cocoa_butter/walk_right.png", 16, 1).animation(),
+        },
+        "huh": {
+            "framerate": 1,
+            LEFT: SpriteSheet("ponies/cocoa_butter/huh_left.png", 1, 1).animation(),
+            RIGHT: SpriteSheet("ponies/cocoa_butter/huh_right.png", 1, 1).animation(),
+        },
+        "huh_behind": {
+            "framerate": 1,
+            LEFT: SpriteSheet("ponies/cocoa_butter/huh_behind_left.png", 1, 1).animation(),
+            RIGHT: SpriteSheet("ponies/cocoa_butter/huh_behind_right.png", 1, 1).animation(),
         },
     }
 
@@ -38,11 +48,30 @@ def available_goals(pony):
             "weight": 10,
             "build": lambda pony: [goal.WanderGoal(pony)],
         },
+        "huh": {
+            "weight": 10,
+            "build": lambda pony: [goal.AnimationLoopGoal(pony, "huh", random.randint(2000, 5000))],
+        },
+        "lost": {
+            "weight": 5,
+            "build": build_lost_goal,
+        },
         "portal": {
             "weight": 1,
             "build": build_portal_goal,
         }
     }
+
+    return goals
+
+def build_lost_goal(pony):
+    goals = []
+
+    for i in range(0, random.randint(1, 3)):
+        goals.append(goal.AnimationLoopGoal(pony, "huh", random.randint(1000, 2000)))
+        goals.append(goal.AnimationLoopGoal(pony, "huh_behind", random.randint(1000, 2000)))
+
+    goals.append(goal.AnimationLoopGoal(pony, "huh", 1000))
 
     return goals
 
@@ -53,6 +82,11 @@ def build_portal_goal(pony):
             goal.WalkToPointGoal(pony, screen.width + 20, pony.y),
             goal.TeleportGoal(pony, -20 - pony.width, pony.y),
             goal.WalkToPointGoal(pony, 10, pony.y),
+            goal.WaitGoal(pony, 500),
+            goal.AnimationLoopGoal(pony, "huh", 500),
+            goal.AnimationLoopGoal(pony, "huh_behind", 3000),
+            goal.AnimationLoopGoal(pony, "huh", 2000),
+            goal.WaitGoal(pony, 1000),
         ]
     else:
         # Left portal
@@ -60,4 +94,9 @@ def build_portal_goal(pony):
             goal.WalkToPointGoal(pony, -20 - pony.width, pony.y),
             goal.TeleportGoal(pony, screen.width + 20, pony.y),
             goal.WalkToPointGoal(pony, screen.width - pony.width - 10, pony.y),
+            goal.WaitGoal(pony, 500),
+            goal.AnimationLoopGoal(pony, "huh", 500),
+            goal.AnimationLoopGoal(pony, "huh_behind", 3000),
+            goal.AnimationLoopGoal(pony, "huh", 2000),
+            goal.WaitGoal(pony, 1000),
         ]

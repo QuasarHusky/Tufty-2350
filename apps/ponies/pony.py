@@ -37,7 +37,8 @@ class Pony:
             if finished:
                 self.goal.finish(False)
                 self.goal = None
-        else:
+        
+        if not self.goal:
             if len(self.goal_queue) == 0:
                 self.enqueue_random_goal()
             
@@ -59,24 +60,22 @@ class Pony:
         screen.blit(self.animation_sprites.frame(frame), vec2(sprite_x, sprite_y))
 
     def render_debug(self):
-        debug = []
+        debug = [
+            f"{self.data.id}",
+            f"{self.last_goal} ({len(self.goal_queue) + 1})",
+        ]
 
         screen.pen = color.rgb(128, 128, 255)
         screen.shape(shape.rectangle(self.x, self.y, self.width, self.height).stroke(1))
 
         if self.goal:
-            debug = self.goal.debug()
+            debug.extend(self.goal.debug())
         else:
-            debug = ["no goal"]
+            debug.append("no goal")
 
-        screen.pen = color.rgb(255, 255, 255)
         for index, line in enumerate(debug):
-            line_w, line_h = screen.measure_text(line)
-
-            if self.x + (self.width / 2) <= screen.width / 2:
-                screen.text(line, self.x + self.width + 2, self.y + (index * 8))
-            else:
-                screen.text(line, self.x - 2 - line_w, self.y + (index * 8))
+            screen.pen = color.rgb(255, 255, 255)
+            screen.text(line, 2, index * 8)
 
     def animate(self, animation_id, loop=True):
         if self.animations[animation_id] == None and animation_id != "idle":

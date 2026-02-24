@@ -6,3 +6,4 @@ from goal.follow_pony import FollowPonyGoal
 from goal.animation import AnimationGoal
 from goal.teleport import TeleportGoal
 from goal.wait import WaitGoal
+from goal.animation_loop import AnimationLoopGoal

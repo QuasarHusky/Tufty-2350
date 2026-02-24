@@ -16,7 +16,7 @@ sprite_bounds = {
 def animations():
     return {
         "idle": {
-            "framerate": 24,
+            "framerate": 1,
             LEFT: SpriteSheet("ponies/paperbark/idle_left.png", 1, 1).animation(),
             RIGHT: SpriteSheet("ponies/paperbark/idle_right.png", 1, 1).animation(),
         },

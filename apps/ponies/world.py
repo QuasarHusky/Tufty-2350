@@ -13,15 +13,15 @@ class World:
         for pony in self.ponies:
             pony.update()
 
-        self.ponies.sort(key=lambda pony: pony.x + (pony.y * 100))
-
     def render(self):
         screen.blit(background_image, vec2(0, 0))
 
-        for pony in self.ponies:
+        ponies_render_order = sorted(self.ponies, key=lambda pony: pony.x + (pony.y * 100))
+
+        for pony in ponies_render_order:
             pony.render_shadow()
         
-        for pony in self.ponies:
+        for pony in ponies_render_order:
             pony.render()
 
     def spawn_pony(self, pony_data):

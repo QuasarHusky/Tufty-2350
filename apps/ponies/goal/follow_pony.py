@@ -16,6 +16,9 @@ class FollowPonyGoal(Goal):
         self.blink_timer = random.randint(0, 4000)
         self.blinking = False
 
+        self.target_x = None
+        self.target_y = None
+
     def start(self):
         pass
 
@@ -35,14 +38,14 @@ class FollowPonyGoal(Goal):
         else:
             offset_x -= 20
 
-        target_x = self.target_pony.x + offset_x
-        target_y = self.target_pony.y + offset_y
+        self.target_x = self.target_pony.x + offset_x
+        self.target_y = self.target_pony.y + offset_y
 
-        distance_to_target = utils.distance(self.pony.x, self.pony.y, target_x, target_y)
+        distance_to_target = utils.distance(self.pony.x, self.pony.y, self.target_x, self.target_y)
 
         if distance_to_target > 2:
-            vx = ((target_x - self.pony.x) / distance_to_target) * self.speed * delta
-            vy = ((target_y - self.pony.y) / distance_to_target) * self.speed * delta
+            vx = ((self.target_x - self.pony.x) / distance_to_target) * self.speed * delta
+            vy = ((self.target_y - self.pony.y) / distance_to_target) * self.speed * delta
 
             self.pony.x += vx
             self.pony.y += vy
@@ -79,7 +82,21 @@ class FollowPonyGoal(Goal):
         self.pony.animate_looping("idle")
 
     def debug(self):
+        if self.target_x != None and self.target_y != None:
+            screen.pen = color.rgb(255, 255, 0)
+            screen.line(self.pony.x, self.pony.y, self.target_x, self.target_y)
+
+            screen.pen = color.rgb(0, 255, 0)
+            screen.circle(self.target_x, self.target_y, 5)
+
+        if self.moving:
+            screen.pen = color.rgb(255, 255, 255)
+        else:
+            screen.pen = color.rgb(128, 128, 128)
+            
+        screen.circle(self.pony.x, self.pony.y, 5)
+
         return [
             "follow_pony",
-            f"-> {self.target_pony.data.name}",
+            f"{self.target_pony.data.id}",
         ]
