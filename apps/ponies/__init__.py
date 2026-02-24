@@ -1,8 +1,12 @@
+import gc
+
 from world import World
 from pony import Pony
 import ponies.paperbark as paperbark
 import ponies.vinyl_scratch as vinyl_scratch
 import ponies.cocoa_butter as cocoa_butter
+
+gc.threshold(-1)
 
 debug = False
 
