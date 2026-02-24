@@ -1,7 +1,7 @@
 try:
     import sys
     import os
-    from badgeware import fatal_error, display, DEFAULT_FONT, State, file_exists
+    from badgeware import fatal_error, display, DEFAULT_FONT, State, get_usb_connected
     import machine
     import gc
 
@@ -61,6 +61,11 @@ try:
             return result
 
         except Exception as e:
+            if not get_usb_connected():
+                State.load("quasar.system", system_state)
+                system_state["launch_app"] = None
+                State.save("quasar.system", system_state)
+
             fatal_error("App Error", e)
 
     def quit_to_launcher(pin):
