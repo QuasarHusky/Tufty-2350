@@ -1,17 +1,12 @@
 import math
-import random
+
+from visualiser import FakeVisualiser
 
 name = "Visualiser"
 auto_cycle = True
 
-bar_count = 16
-bar_width = math.ceil(screen.width / bar_count)
-bar_targets = []
-bar_values = []
-
-for i in range(bar_count):
-    bar_values.append(0)
-    bar_targets.append(0)
+visualiser = FakeVisualiser(16)
+bar_width = math.ceil(screen.width / visualiser.bar_count)
 
 def render_background():
     global bar_values
@@ -19,26 +14,16 @@ def render_background():
     screen.pen = color.rgb(100, 30, 110)
     screen.clear()
 
-    decay_speed = io.ticks_delta / 1000 * 3
+    visualiser.update()
 
-    for i in range(bar_count - 1):
-        bar_values[i] -= (bar_values[i] - bar_values[i + 1]) * 0.3
-
-    for i in range(1, bar_count):
-        bar_values[i] -= (bar_values[i] - bar_values[i - 1]) * 0.3
-
-    for i in range(bar_count):
-        bar_values[i] = max(0, bar_values[i] - decay_speed)
-        bar_values[i] = max(bar_values[i], random.random() * random.random())
-        bar_targets[i] -= (bar_targets[i] - bar_values[i]) * 0.3
-
-        render_bar(i)
+    for i in range(visualiser.bar_count):
+        render_bar(i, visualiser.get_bar(i))
 
 def render_overlay():
     pass
 
-def render_bar(i):
-    height = max(2, math.floor(bar_targets[i] * bar_targets[i] * screen.height * 1.75))
+def render_bar(i, value):
+    height = max(2, math.floor(value * screen.height * 1.75))
     x = i * bar_width
     y = (screen.height - height) / 2
 
