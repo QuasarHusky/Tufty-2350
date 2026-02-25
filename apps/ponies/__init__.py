@@ -1,12 +1,8 @@
-import gc
-
 from world import World
 from pony import Pony
 import ponies.paperbark as paperbark
 import ponies.vinyl_scratch as vinyl_scratch
 import ponies.cocoa_butter as cocoa_butter
-
-gc.threshold(-1)
 
 debug = False
 debug_target_pony = 0
@@ -20,10 +16,6 @@ def init():
 
 def update():
     global world, debug, debug_target_pony
-
-    # BUG: Prevent updating when having a lag spike - likely caused by GC?
-    if io.ticks_delta > 500:
-        return
     
     world.update()
     world.render()
