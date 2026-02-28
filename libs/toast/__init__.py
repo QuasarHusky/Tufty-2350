@@ -24,7 +24,7 @@ def update():
     global toast_lifetime
 
     if toast_lifetime > 0:
-        toast_lifetime -= io.ticks_delta
+        toast_lifetime -= badge.ticks_delta
         render()
 
 def render():

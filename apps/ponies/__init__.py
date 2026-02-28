@@ -23,15 +23,15 @@ def update():
     if debug:
         render_debug()
 
-    if io.BUTTON_B in io.pressed:
+    if badge.pressed(BUTTON_B):
         debug = not debug   
 
-    if io.BUTTON_A in io.pressed and debug:
+    if badge.pressed(BUTTON_A) and debug:
         debug_target_pony -= 1
         if debug_target_pony < 0:
             debug_target_pony = len(world.ponies) - 1   
     
-    if io.BUTTON_C in io.pressed and debug:
+    if badge.pressed(BUTTON_C) and debug:
         debug_target_pony += 1
         if debug_target_pony >= len(world.ponies):
             debug_target_pony = 0

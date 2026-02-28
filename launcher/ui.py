@@ -1,5 +1,3 @@
-from badgeware import get_battery_level, is_charging
-
 background_image = image.load("/system/assets/images/background.png")
 
 black = color.rgb(0, 0, 0)
@@ -14,10 +12,10 @@ def draw_background():
     screen.blit(background_image, vec2(0, 0))
 
 def draw_header():
-    battery_level = get_battery_level()
+    battery_level = badge.battery_level()
 
-    if is_charging():
-        battery_display = (io.ticks / 50) % 100
+    if badge.is_charging():
+        battery_display = (badge.ticks / 25) % 100
     else:
         battery_display = battery_level
     

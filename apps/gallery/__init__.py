@@ -11,7 +11,7 @@ os.chdir("/system/apps/gallery")
 
 APP_ID = "quasar.gallery"
 
-mode(HIRES)
+badge.mode(HIRES | VSYNC)
 
 state = {
     "recent_image_path": None,
@@ -55,7 +55,7 @@ def update():
     screen.font = rom_font.ignore
     toast.update()
     
-    if io.BUTTON_B in io.pressed:
+    if badge.pressed(BUTTON_B):
         locked = not locked
         if locked:
             toast.show("Locked", duration=toast.SHORT, position=toast.BOTTOM)
@@ -63,13 +63,13 @@ def update():
             toast.show("Unlocked", duration=toast.SHORT, position=toast.BOTTOM)
 
 
-    if io.BUTTON_A in io.pressed or io.BUTTON_UP in io.pressed:
+    if badge.pressed(BUTTON_A) or badge.pressed(BUTTON_UP):
         if not locked:
             prev_image()
         else:
             toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
-    if io.BUTTON_C in io.pressed or io.BUTTON_DOWN in io.pressed:
+    if badge.pressed(BUTTON_C) or badge.pressed(BUTTON_DOWN):
         if not locked:
             next_image()
         else:

@@ -21,12 +21,12 @@ def update():
     screen.pen = color.rgb(255, 255, 255)
     screen.text(f"Backlight: {backlight_to_percent(system_state["backlight"]) * 100:.0f}%", 4, 2)
 
-    if io.BUTTON_UP in io.pressed:
+    if badge.pressed(BUTTON_UP):
         system_state["backlight"] = percent_to_backlight(min(1, backlight_to_percent(system_state["backlight"]) + 0.1))
         display.backlight(system_state["backlight"])
         State.save("quasar.system", system_state)
 
-    if io.BUTTON_DOWN in io.pressed:
+    if badge.pressed(BUTTON_DOWN):
         system_state["backlight"] = percent_to_backlight(max(0, backlight_to_percent(system_state["backlight"]) - 0.1))
         display.backlight(system_state["backlight"])
         State.save("quasar.system", system_state)

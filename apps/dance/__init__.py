@@ -2,7 +2,6 @@ import os
 import sys
 import math
 import random
-from badgeware import SpriteSheet
 
 import toast
 import system_ui
@@ -22,7 +21,7 @@ current_character = None
 current_animation = None
 current_animation_index = 0
 current_animation_sprites = None
-animation_start_time = io.ticks
+animation_start_time = badge.ticks
 
 auto_cycle = False
 auto_cycle_timer = 0
@@ -45,7 +44,7 @@ def update():
     toast.update()
     system_ui.update()
 
-    if io.BUTTON_A in io.pressed:
+    if badge.pressed(BUTTON_A):
         set_auto_cycle(not auto_cycle)
 
         if auto_cycle:
@@ -53,16 +52,16 @@ def update():
         else:
             toast.show("Auto Cycle: OFF", duration=toast.SHORT, position=toast.TOP)
 
-    if io.BUTTON_B in io.pressed:
+    if badge.pressed(BUTTON_B):
         cycle_character()
     
-    if io.BUTTON_C in io.pressed:
+    if badge.pressed(BUTTON_C):
         cycle_scene()
 
-    if io.BUTTON_UP in io.pressed:
+    if badge.pressed(BUTTON_UP):
         prev_animation()
 
-    if io.BUTTON_DOWN in io.pressed:
+    if badge.pressed(BUTTON_DOWN):
         next_animation()
 
 
@@ -71,7 +70,7 @@ def render():
     
     current_scene.render_background()
 
-    frame = math.floor((io.ticks - animation_start_time) / ms_per_frame)
+    frame = math.floor((badge.ticks - animation_start_time) / ms_per_frame)
 
     image = current_animation_sprites.frame(frame)
 
@@ -156,7 +155,7 @@ def update_auto_cycle():
     if not auto_cycle:
         return
     
-    auto_cycle_timer -= io.ticks_delta
+    auto_cycle_timer -= badge.ticks_delta
 
     if auto_cycle_timer <= 0:
         auto_cycle_timer = random.randint(4000, 8000)
@@ -190,4 +189,4 @@ def load_animation(animation):
     global current_animation, current_animation_sprites, animation_start_time
     current_animation = animation
     current_animation_sprites = SpriteSheet(animation["path"], animation["frames"], 1).animation()
-    animation_start_time = io.ticks
+    animation_start_time = badge.ticks

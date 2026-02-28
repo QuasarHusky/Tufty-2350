@@ -1,7 +1,9 @@
+from badgeware import fatal_error
+
 try:
     import sys
     import os
-    from badgeware import fatal_error, display, DEFAULT_FONT, State, get_usb_connected
+    from badgeware import display, DEFAULT_FONT, State
     import machine
     import gc
 
@@ -13,11 +15,12 @@ try:
 
     display.backlight(system_state["backlight"])
 
+    badge.default_clear = None
+    badge.mode(LORES)
+
     screen.pen = color.rgb(0, 0, 0)
     screen.clear()
-    display.update(screen.width == 320)
-
-    running_app = None
+    display.update()
 
     standard_modules = list(sys.modules.keys())
 
@@ -40,16 +43,16 @@ try:
             result = None
 
             while result == None:
-                io.poll()
+                badge.poll()
                 result = update()
 
                 # screen.pen = color.rgb(0, 0, 0)
                 # screen.rectangle(0, 0, 40, 15)
                 # screen.font = DEFAULT_FONT
                 # screen.pen = color.rgb(255, 255, 255)
-                # screen.text(f"{1000 / io.ticks_delta:.1f}", 2, 0)
+                # screen.text(f"{1000 / badge.ticks_delta:.1f}", 2, 0)
 
-                display.update(screen.width == 320)
+                display.update()
 
             if on_exit:
                 on_exit()
@@ -57,7 +60,7 @@ try:
             return result
 
         except Exception as e:
-            if not get_usb_connected():
+            if not badge.usb_connected():
                 State.load("quasar.system", system_state)
                 system_state["launch_app"] = None
                 State.save("quasar.system", system_state)
@@ -106,10 +109,10 @@ try:
     system_state["launch_app"] = app
     State.save("quasar.system", system_state)
 
-    io.poll()
-    io.poll()
-    while io.held:
-        io.poll()
+    badge.poll()
+    badge.poll()
+    while badge.held():
+        badge.poll()
 
     machine.Pin.board.BUTTON_HOME.irq(
         trigger=machine.Pin.IRQ_FALLING, handler=quit_to_launcher
@@ -132,8 +135,6 @@ try:
     machine.reset()
 
 except Exception as e:
-    screen.pen = color.rgb(255, 0, 0)
+    screen.pen = color.rgb(0, 0, 0)
     screen.clear()
-    display.update(screen.width == 320)
-
     fatal_error("System Error", e)

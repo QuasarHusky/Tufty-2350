@@ -19,7 +19,7 @@ for i in range(particle_count):
 def render_background():
     global particles, delta
 
-    delta = io.ticks_delta / 1000
+    delta = badge.ticks_delta / 1000
 
     screen.pen = color.rgb(10, 0, 30)
     screen.clear()

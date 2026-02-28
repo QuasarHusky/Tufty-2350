@@ -1,4 +1,3 @@
-from badgeware import SpriteSheet
 import goal
 from utils import LEFT, RIGHT
 

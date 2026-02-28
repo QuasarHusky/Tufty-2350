@@ -12,7 +12,7 @@ class AnimationLoopGoal(Goal):
         self.pony.animate_looping(self.animation)
 
     def update(self):
-        self.timer -= io.ticks_delta
+        self.timer -= badge.ticks_delta
         return self.timer <= 0
 
     def finish(self, interrupt):

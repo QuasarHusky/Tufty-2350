@@ -23,7 +23,7 @@ class Pony:
         self.animation_id = "idle"
         self.animation_sprites = self.animations["idle"][self.facing]
         self.animation_loop = True
-        self.animation_start = io.ticks
+        self.animation_start = badge.ticks
         self.animation_ms_per_frame = 1000 / self.animations["idle"]["framerate"]
 
         self.last_goal = None
@@ -84,7 +84,7 @@ class Pony:
         self.animation_id = animation_id
         self.animation_sprites = self.animations[animation_id][self.facing]
         self.animation_loop = loop
-        self.animation_start = io.ticks
+        self.animation_start = badge.ticks
         self.animation_ms_per_frame = 1000 / self.animations[animation_id]["framerate"]
 
     def animate_oneshot(self, animation_id):
@@ -94,7 +94,7 @@ class Pony:
        self.animate(animation_id, loop=True)
 
     def get_animation_frame(self):
-        frame = math.floor((io.ticks - self.animation_start) / self.animation_ms_per_frame)
+        frame = math.floor((badge.ticks - self.animation_start) / self.animation_ms_per_frame)
 
         if not self.animation_loop:
             frame = min(frame, len(self.animation_sprites.frames))
@@ -105,7 +105,7 @@ class Pony:
         if self.animation_loop:
             return False
         
-        frame = math.floor((io.ticks - self.animation_start) / self.animation_ms_per_frame)
+        frame = math.floor((badge.ticks - self.animation_start) / self.animation_ms_per_frame)
 
         return frame >= len(self.animation_sprites.frames)
     

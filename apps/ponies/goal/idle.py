@@ -18,12 +18,12 @@ class IdleGoal(Goal):
         self.pony.animate_looping("idle")
 
     def update(self):
-        self.timer -= io.ticks_delta
+        self.timer -= badge.ticks_delta
         
         if self.timer <= 0:
             return True
         
-        self.blink_timer -= io.ticks_delta
+        self.blink_timer -= badge.ticks_delta
 
         if self.blink_timer <= 0:
             if self.blinking == False:

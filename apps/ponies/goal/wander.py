@@ -32,12 +32,12 @@ class WanderGoal(Goal):
         self.pony.animate_looping("walk")
 
     def update(self):
-        self.timer -= io.ticks_delta
+        self.timer -= badge.ticks_delta
         
         if self.timer <= 0:
             return True
         
-        delta = io.ticks_delta / 1000
+        delta = badge.ticks_delta / 1000
         self.pony.x += self.vx * delta
         self.pony.y += self.vy * delta
 

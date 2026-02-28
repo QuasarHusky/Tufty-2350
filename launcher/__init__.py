@@ -2,8 +2,6 @@ import os
 import sys
 
 import ui
-from badgeware import run
-
 from app import Apps
 
 screen.font = rom_font.ark
@@ -14,28 +12,28 @@ apps = Apps("/system/apps")
 
 active = 0
 
-io.poll()
+badge.poll()
 
 def update():
     global active, apps
 
     # process button inputs to switch between apps
-    if io.BUTTON_C in io.pressed:
+    if badge.pressed(BUTTON_C):
         if (active % 3) < 2 and active < len(apps) - 1:
             active += 1
-    if io.BUTTON_A in io.pressed:
+    if badge.pressed(BUTTON_A):
         if (active % 3) > 0 and active > 0:
             active -= 1
-    if io.BUTTON_UP in io.pressed and active >= 3:
+    if badge.pressed(BUTTON_UP) and active >= 3:
         active -= 3
-    if io.BUTTON_DOWN in io.pressed:
+    if badge.pressed(BUTTON_DOWN):
         active += 3
         if active >= len(apps):
             active = len(apps) - 1
 
     apps.activate(active)
 
-    if io.BUTTON_B in io.pressed:
+    if badge.pressed(BUTTON_B):
         return f"/system/apps/{apps.active.path}"
 
     ui.draw_background()
@@ -51,7 +49,3 @@ def update():
     apps.draw_pagination()
 
     return None
-
-
-if __name__ == "__main__":
-    run(update)

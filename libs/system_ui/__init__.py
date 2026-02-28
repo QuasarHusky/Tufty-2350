@@ -1,16 +1,15 @@
-from badgeware import get_battery_level, is_charging
 import math
 
 
 def update():
-    battery_level = get_battery_level()
-    charging = is_charging()
+    battery_level = badge.battery_level()
+    charging = badge.is_charging()
 
     if not charging and battery_level <= 5: 
         render_battery_low()
 
 def render_battery_low():
-    if math.floor(io.ticks / 500) % 2 == 0:
+    if math.floor(badge.ticks / 500) % 2 == 0:
         return
 
     phosphor = color.rgb(255, 50, 50)

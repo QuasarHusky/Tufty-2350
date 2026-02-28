@@ -12,7 +12,7 @@ class FakeVisualiser():
             self.bar_targets.append(0)
 
     def update(self):
-        decay_speed = io.ticks_delta / 1000 * 3
+        decay_speed = badge.ticks_delta / 1000 * 3
 
         for i in range(self.bar_count - 1):
             self.bar_values[i] -= (self.bar_values[i] - self.bar_values[i + 1]) * 0.3

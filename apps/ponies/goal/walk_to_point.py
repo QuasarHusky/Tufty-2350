@@ -22,7 +22,7 @@ class WalkToPointGoal(Goal):
         self.initial_x = self.pony.x
         self.initial_y = self.pony.y
 
-        self.start_time = io.ticks
+        self.start_time = badge.ticks
 
         distance = utils.distance(self.initial_x, self.initial_y, self.target_x, self.target_y)
         self.duration = math.ceil((distance / self.speed) * 1000)
@@ -38,7 +38,7 @@ class WalkToPointGoal(Goal):
         if self.duration == 0:
             return True
         
-        t = (io.ticks - self.start_time) / self.duration
+        t = (badge.ticks - self.start_time) / self.duration
 
         if t >= 1:
             return True
@@ -56,7 +56,7 @@ class WalkToPointGoal(Goal):
         self.pony.animate_looping("idle")
 
     def debug(self):
-        t = (io.ticks - self.start_time) / self.duration
+        t = (badge.ticks - self.start_time) / self.duration
 
         screen.pen = color.rgb(255, 255, 0)
         screen.line(self.initial_x, self.initial_y, self.target_x, self.target_y)

@@ -1,4 +1,3 @@
-from badgeware import display
 import wifi_patched as wifi
 import requests
 import os
@@ -12,7 +11,7 @@ def init():
     status, message = None, ""
 
     while status != 3:
-        io.poll()
+        badge.poll()
         wifi.tick()
         status, message = wifi.status()
         show_message(f"[{status}] {message}")
@@ -30,7 +29,7 @@ def init():
     screen.clear()
     screen.blit(download, vec2(0, 0))
 
-    display.update(screen.width == 320)
+    badge.update()
 
 def update():
     pass
@@ -44,4 +43,4 @@ def show_message(text):
     screen.pen = color.rgb(255, 255, 255)
     screen.text(text, (screen.width - text_w) / 2, (screen.height - text_h) / 2)
 
-    display.update(screen.width == 320)
+    badge.update()
