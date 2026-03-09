@@ -1,4 +1,5 @@
 import math
+import gc
 from animations import animations
 import toast
 
@@ -78,16 +79,20 @@ def load_animation(animation):
     current_animation = animation
     animation_sprites = []
     animation_total_frames = 0
+    
+    gc.collect()
 
     for sprite_data in animation["sprites"]:
         animation_sprites.append(SpriteSheet(sprite_data["path"], sprite_data["width"], sprite_data["height"]))
         animation_total_frames += sprite_data["frames"]
 
-    screen.pen = color.rgb(0, 0, 0)
-    screen.clear()
-    display.update()
     if hires != animation["hires"]:
         hires = animation["hires"]
+
+        screen.pen = color.rgb(0, 0, 0)
+        screen.clear()
+        display.update()
+
         if hires:
             badge.mode(HIRES)
         else:
