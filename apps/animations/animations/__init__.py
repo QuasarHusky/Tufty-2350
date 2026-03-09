@@ -2,25 +2,38 @@ animations = [
     {
         "name": "Vinyl Bop",
         "framerate": 12,
-        "hires": True,
+        "hires": False,
         "sprites": [
             {
                 "path": "animations/Vinyl Bop.png",
-                "width": 6,
-                "height": 2,
+                "width": 12,
+                "height": 1,
                 "frames": 12,
+            },
+        ],
+    },
+    {
+        "name": "Vinyl Party",
+        "framerate": 24,
+        "hires": False,
+        "sprites": [
+            {
+                "path": "animations/Vinyl Party.png",
+                "width": 12,
+                "height": 2,
+                "frames": 24,
             },
         ],
     },
     {
         "name": "Funky Town",
         "framerate": 30,
-        "hires": True,
+        "hires": False,
         "sprites": [
             {
                 "path": "animations/Funky Town.png",
-                "width": 6,
-                "height": 5,
+                "width": 12,
+                "height": 3,
                 "frames": 30,
             },
         ],
