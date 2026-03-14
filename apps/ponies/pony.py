@@ -4,7 +4,6 @@ import random
 import utils
 
 shadow_image = image.load("assets/shadow.png")
-shadow_image.alpha = 100
 
 class Pony:
 
@@ -50,7 +49,9 @@ class Pony:
         shadow_x = math.floor(self.x - self.data.sprite_bounds["x"] + 19)
         shadow_y = math.floor(self.y - self.data.sprite_bounds["y"] + 86)
 
+        screen.alpha = 100
         screen.blit(shadow_image, vec2(shadow_x, shadow_y))
+        screen.alpha = 255
 
     def render(self):
         sprite_x = math.floor(self.x - self.data.sprite_bounds["x"])
