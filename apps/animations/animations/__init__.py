@@ -51,4 +51,17 @@ animations = [
             },
         ],
     },
+    {
+        "name": "Flutter Bop",
+        "framerate": 24,
+        "hires": False,
+        "sprites": [
+            {
+                "path": "animations/Flutter Bop.png",
+                "width": 12,
+                "height": 4,
+                "frames": 38,
+            },
+        ],
+    },
 ]
