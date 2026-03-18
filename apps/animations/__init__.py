@@ -12,10 +12,15 @@ animation_sprites = []
 animation_start_time = 0
 animation_total_frames = 0
 
+locked = False
+playback_speed = 1
+
 def init():
     load_animation(animations[0])
 
 def update():
+    global locked
+
     render_animation()
 
     if hires:
@@ -25,17 +30,42 @@ def update():
 
     toast.update()
 
-    if badge.pressed(BUTTON_A) or badge.pressed(BUTTON_UP):
-        prev_animation()
+    if badge.pressed(BUTTON_UP):
+        if not locked:
+            prev_animation()
+        else:
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
 
-    if badge.pressed(BUTTON_C) or badge.pressed(BUTTON_DOWN):
-        next_animation()
+    if badge.pressed(BUTTON_DOWN):
+        if not locked:
+            next_animation()
+        else:
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
+
+    if badge.pressed(BUTTON_A):
+        if not locked:
+            set_speed(playback_speed - 0.1)
+        else:
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
+
+    if badge.pressed(BUTTON_C):
+        if not locked:
+            set_speed(playback_speed + 0.1)
+        else:
+            toast.show("Press B to unlock", duration=toast.SHORT, position=toast.BOTTOM)
+
+    if badge.pressed(BUTTON_B):
+        locked = not locked
+        if locked:
+            toast.show("Locked", duration=toast.SHORT, position=toast.BOTTOM)
+        else:
+            toast.show("Unlocked", duration=toast.SHORT, position=toast.BOTTOM)
 
 def render_animation():
     if current_animation == None:
         return
     
-    ms_per_frame = 1000 / current_animation["framerate"]
+    ms_per_frame = (1000 / current_animation["framerate"]) / playback_speed
     frame = math.floor((badge.ticks - animation_start_time) / ms_per_frame) % animation_total_frames
 
     sprite = get_frame_sprite(frame)
@@ -52,7 +82,7 @@ def next_animation():
 
     toast.show(
         f"{animations[current_index]["name"]}",
-        duration=toast.LONG,
+        duration=toast.SHORT,
         position=toast.BOTTOM
     )
 
@@ -67,7 +97,19 @@ def prev_animation():
 
     toast.show(
         f"{animations[current_index]["name"]}",
-        duration=toast.LONG,
+        duration=toast.SHORT,
+        position=toast.BOTTOM
+    )
+
+def set_speed(new_speed):
+    global playback_speed, animation_start_time
+
+    playback_speed = max(0.1, min(10, new_speed))
+    animation_start_time = badge.ticks
+
+    toast.show(
+        f"{playback_speed:.1f}x Speed",
+        duration=toast.SHORT,
         position=toast.BOTTOM
     )
 
