@@ -3,7 +3,7 @@ import random
 class FakeVisualiser():
 
     def __init__(self, bar_count):
-        self.bar_count = 16
+        self.bar_count = bar_count
         self.bar_targets = []
         self.bar_values = []
 
