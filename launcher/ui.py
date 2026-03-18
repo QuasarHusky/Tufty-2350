@@ -1,3 +1,5 @@
+import math
+
 background_image = image.load("/system/assets/images/background.png")
 
 black = color.rgb(0, 0, 0)
@@ -8,8 +10,9 @@ def draw_background():
     screen.pen = color.rgb(0, 0, 0)
     screen.clear()
 
-    background_image.alpha = 128
+    screen.alpha = 128
     screen.blit(background_image, vec2(0, 0))
+    screen.alpha = 255
 
 def draw_header():
     battery_level = badge.battery_level()
@@ -20,7 +23,7 @@ def draw_header():
         battery_display = battery_level
     
     screen.pen = phosphor
-    screen.text("Quasar's Badge", 5, 2)
+    screen.text("Paperbark's Badge", 5, 2)
 
     pos = (137, 4)
     size = (16, 8)
@@ -35,6 +38,6 @@ def draw_header():
     screen.pen = background
     screen.shape(shape.rectangle(pos[0] + 1, pos[1] + 1, size[0] - 2, size[1] - 2))
 
-    width = ((size[0] - 4) / 100) * battery_display
+    width = math.ceil(((size[0] - 4) / 100) * battery_display)
     screen.pen = phosphor
     screen.shape(shape.rectangle(pos[0] + 2, pos[1] + 2, width, size[1] - 4))
